@@ -41,6 +41,10 @@ class RegisterPage(ttk.Frame):
         register_button = ttk.Button(self, text="Register", command=self.register_dorm)
         register_button.grid(row=5, column=1, pady=20)
 
+        # Back button
+        back_button = ttk.Button(self, text="Back", command=lambda: controller.show_frame("LandingPage"))
+        back_button.grid(row=5, column=0, pady=20)
+
     def register_dorm(self):
         lsu_id = self.lsu_id_entry.get()
         dorm_number = self.dorm_number_entry.get()

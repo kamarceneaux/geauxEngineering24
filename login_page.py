@@ -37,6 +37,10 @@ class LoginPage(ttk.Frame):
         login_button = ttk.Button(self, text="Login", command=self.login)
         login_button.grid(row=4, column=1, pady=20)
 
+        # Back button
+        back_button = ttk.Button(self, text="Back", command=lambda: controller.show_frame("LandingPage"))
+        back_button.grid(row=5, column=0, pady=20)
+
     def login(self):
         # Gets the information from the insert fields
         lsu_id = self.lsu_id_entry.get()
