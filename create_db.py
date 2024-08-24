@@ -30,7 +30,8 @@ def create_database():
     CREATE TABLE IF NOT EXISTS Users (
         lsuId TEXT PRIMARY KEY,
         name TEXT NOT NULL,
-        phoneNumber TEXT NOT NULL UNIQUE
+        securityQuestion TEXT NOT NULL UNIQUE,
+        securityAnswer TEXT NOT NULL
     )
     ''')
 
@@ -45,33 +46,24 @@ def addUsers():
     cursor = conn.cursor()
 
     data = [
-        ("890000000", "Johnny", "2253059053"),
-        ("890000001", "Jane", "2255555556"),
-        ("890000002", "John", "2255555557"),
-        ("890000003", "Janet", "2255555558"),
-        ("890000004", "John", "2255555559"),
-        ("890000005", "Janet", "2254445558")
+        ("890000000", "John Doe", "What is your favorite color?", "Blue"),
+        ("890000001", "Jane Doe", "What is your favorite animal?", "Dog"),
+        ("890000002", "John Smith", "What is your favorite food?", "Pizza"),
+        ("890000003", "Jane Smith", "What is your favorite movie?", "Inception"),
+        ("890000004", "John Johnson", "What is your favorite book?", "Harry Potter"),
+        ("890000005", "Jane Johnson", "What is your favorite song?", "Bohemian Rhapsody")
     ]
 
-    cursor.executemany("INSERT INTO Users (lsuId, name, phoneNumber) VALUES (?, ?, ?)", data)
+    cursor.executemany("INSERT INTO Users (lsuId, name, securityQuestion,securityAnswer  ) VALUES (?, ?, ?, ?)", data)
     conn.commit()
 
 def addDormMembers():
     conn = sqlite3.connect('dorm_security.db')
     cursor = conn.cursor()
 
-    data = [
-        ("890000000", "2253059053", "1234"),
-        ("890000000", "2253019053", "1234"),
-        ("890000000", "2253029053", "4312"),
-        ("890000003", "2253049053", "1223"),
-        ("890000004", "2255555555", "4321"),
-        ("890000005", "2255555556", "1234"),
-    ]
-
     cursor.executemany("INSERT INTO DormMembers (lsuId, name, phoneNumber, pin) VALUES (?, ?, ?, ?)", data)
     conn.commit()
 
 
-# create_database()
-# addUsers()
+create_database()
+addUsers()

@@ -6,6 +6,7 @@ from pages.landing_page import LandingPage
 from pages.login_page import LoginPage
 from pages.register_page import RegisterPage
 from pages.verification_page import VerificationPage
+from pages.authenticated import AuthenticatedPage
 
 
 class App(ttk.Window):
@@ -17,11 +18,14 @@ class App(ttk.Window):
 
         self.conn = sqlite3.connect('dorm_security.db')
         self.cursor = self.conn.cursor()
+        self.lsu_id = ""
+        self.security_question = ""
 
         self.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
-        for F in (LandingPage, RegisterPage, LoginPage, VerificationPage, AccessExpiredPage):
+        for F in (LandingPage, RegisterPage, LoginPage, VerificationPage,
+                  AccessExpiredPage, AuthenticatedPage):
             page_name = F.__name__
             frame = F(parent=self, controller=self)
             self.frames[page_name] = frame

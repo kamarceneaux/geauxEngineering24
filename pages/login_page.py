@@ -83,6 +83,7 @@ class LoginPage(ttk.Frame):
                             ''', (lsu_id,))
 
             if query.fetchone()[0] == pin:
+                self.controller.lsu_id = lsu_id
                 self.controller.show_frame("VerificationPage")
             else:
                 self.show_message("Invalid PIN, please try again")
