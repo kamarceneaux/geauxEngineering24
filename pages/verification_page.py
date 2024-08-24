@@ -15,21 +15,16 @@ class VerificationPage(ttk.Frame):
 
         label = ttk.Label(self, text="Security Question Verification", font=("Helvetica", 18))
         label.grid(row=1, column=1, pady=10)
+        # generate the question button
+        generate_question_button = ttk.Button(self, text="Generate Question", command=self.generate_security_question)
+        generate_question_button.grid(row=3, column=2, pady=5, padx=30, sticky='e')
 
-        # self.generate_security_question()
-
-        # Verification Code Entry
-        verification_code_label = ttk.Label(self, text=f"Answer the security question: {self.controller.security_question}")
-        verification_code_label.grid(row=2, column=0, pady=5, padx=30, sticky='w')
-
-        # Add  to generate security question
+        # Add to submit security question
         self.security_answer = ttk.Entry(self)
-        self.security_answer.grid(row=2, column=1, pady=5, padx=30, sticky='e')
+        self.security_answer.grid(row=3, column=1, pady=5, padx=30, sticky='e')
 
         verify_button = ttk.Button(self, text="Verify", command=self.verify_code)
-        verify_button.grid(row=3, column=1, pady=20)
-
-        self.show_message("Enter the verification code sent to your phone number.")
+        verify_button.grid(row=4, column=1, pady=20)
 
     def generate_security_question(self):
         print("Generating security question")
@@ -38,6 +33,8 @@ class VerificationPage(ttk.Frame):
         SELECT securityQuestion FROM Users WHERE lsuId=?
         ''', (self.controller.lsu_id,))
         self.controller.security_question = query.fetchone()[0]
+
+        self.show_message(f"Security Question: {self.controller.security_question}")
 
     def verify_code(self):
         # Get the security answer from the entry
@@ -50,10 +47,11 @@ class VerificationPage(ttk.Frame):
         correct_answer = query.fetchone()[0]
 
         if security_answer.lower() == correct_answer.lower():
-            self.show_frame("")
+            print("Correct security answer")
+            self.show_frame("AuthenticatedPage")
         else:
             self.show_message("Incorrect security answer. Please try again.")
 
     def show_message(self, message):
         message_label = ttk.Label(self, text=message, font=("Helvetica", 12))
-        message_label.grid(row=4, column=1, pady=10)
+        message_label.grid(row=5, column=1, pady=10)
