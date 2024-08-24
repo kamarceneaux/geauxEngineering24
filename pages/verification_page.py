@@ -48,7 +48,7 @@ class VerificationPage(ttk.Frame):
 
         if security_answer.lower() == correct_answer.lower():
             print("Correct security answer")
-            self.show_frame("AuthenticatedPage")
+            self.controller.show_frame("AuthenticatedPage")
         else:
             self.show_message("Incorrect security answer. Please try again.")
 
