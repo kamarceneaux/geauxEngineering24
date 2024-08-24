@@ -54,7 +54,12 @@ def addUsers():
         ("890000005", "Jane Johnson", "What is your favorite song?", "Bohemian Rhapsody")
     ]
 
-    cursor.executemany("INSERT INTO Users (lsuId, name, securityQuestion,securityAnswer  ) VALUES (?, ?, ?, ?)", data)
+    index = 0
+    while index < len(data):
+        cursor.execute("INSERT INTO Users (lsuId, name, securityQuestion, securityAnswer) VALUES (?, ?, ?, ?)",
+                       data[index])
+        index += 1
+
     conn.commit()
 
 def addDormMembers():
@@ -65,5 +70,5 @@ def addDormMembers():
     conn.commit()
 
 
-create_database()
-addUsers()
+# create_database()
+# addUsers()

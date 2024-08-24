@@ -46,49 +46,51 @@ class LoginPage(ttk.Frame):
         back_button.grid(row=5, column=0, pady=20)
 
     def login(self):
-        # Gets the information from the insert fields
-        lsu_id = self.lsu_id_entry.get()
-        dorm_num = self.dorm_num.get()
+        while self.attempts < 3:
+            # Gets the information from the insert fields
+            lsu_id = self.lsu_id_entry.get()
+            dorm_num = self.dorm_num.get()
 
-        # If the lsu ID does not start with 89, it is invalid
-        if not lsu_id.startswith("89"):
-            self.show_message("Invalid LSU ID. Should start with 89*******")
-            self.increment_attempts()
-            return
-        else:
-            # Check to see if the LSU ID exists in the User table and then check to see if that dorm number is
-            # associated with the LSU ID
-            query = self.controller.cursor.execute('''
-                            SELECT lsuId FROM DormMembers WHERE lsuId=?
-                            ''', (lsu_id,))
-
-            if query.fetchone() is None:
-                self.show_message("Invalid LSU ID")
+            # If the lsu ID does not start with 89, it is invalid
+            if not lsu_id.startswith("89"):
+                self.show_message("Invalid LSU ID. Should start with 89*******")
                 self.increment_attempts()
-                return
-
-            query = self.controller.cursor.execute('''
-                            SELECT dormNumber FROM DormMembers WHERE lsuId=? AND dormNumber=?
-                            ''', (lsu_id, dorm_num))
-
-            if query.fetchone() is None:
-                self.show_message("Invalid Dorm Number or unassociated with LSU ID")
-                self.increment_attempts()
-                return
-
-            # If the pin is correct, the user is now must verify themselves
-            pin = self.pin_entry.get()
-            query = self.controller.cursor.execute('''
-                            SELECT pin FROM DormMembers WHERE lsuId=?
-                            ''', (lsu_id,))
-
-            if query.fetchone()[0] == pin:
-                self.controller.lsu_id = lsu_id
-                self.controller.show_frame("VerificationPage")
+                continue
             else:
-                self.show_message("Invalid PIN, please try again")
-                self.increment_attempts()
-                return
+                # Check to see if the LSU ID exists in the User table and then check to see if that dorm number is
+                # associated with the LSU ID
+                query = self.controller.cursor.execute('''
+                                SELECT lsuId FROM DormMembers WHERE lsuId=?
+                                ''', (lsu_id,))
+
+                if query.fetchone() is None:
+                    self.show_message("Invalid LSU ID")
+                    self.increment_attempts()
+                    continue
+
+                query = self.controller.cursor.execute('''
+                                SELECT dormNumber FROM DormMembers WHERE lsuId=? AND dormNumber=?
+                                ''', (lsu_id, dorm_num))
+
+                if query.fetchone() is None:
+                    self.show_message("Invalid Dorm Number or unassociated with LSU ID")
+                    self.increment_attempts()
+                    continue
+
+                # If the pin is correct, the user is now must verify themselves
+                pin = self.pin_entry.get()
+                query = self.controller.cursor.execute('''
+                                SELECT pin FROM DormMembers WHERE lsuId=?
+                                ''', (lsu_id,))
+
+                if query.fetchone()[0] == pin:
+                    self.controller.lsu_id = lsu_id
+                    self.controller.show_frame("VerificationPage")
+                    break
+                else:
+                    self.show_message("Invalid PIN, please try again")
+                    self.increment_attempts()
+                    continue
 
     def increment_attempts(self):
         self.attempts += 1
