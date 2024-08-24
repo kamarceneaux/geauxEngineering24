@@ -1,11 +1,11 @@
 import sqlite3
 import ttkbootstrap as ttk
 
-from access_expired import AccessExpiredPage
-from landing_page import LandingPage
-from login_page import LoginPage
-from register_page import RegisterPage
-from verification_page import VerificationPage
+from pages.access_expired import AccessExpiredPage
+from pages.landing_page import LandingPage
+from pages.login_page import LoginPage
+from pages.register_page import RegisterPage
+from pages.verification_page import VerificationPage
 
 
 class App(ttk.Window):
